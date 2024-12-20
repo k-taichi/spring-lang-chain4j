@@ -1,30 +1,31 @@
 package com.ktai.springlangchainforj;
 
+import com.ktai.springlangchainforj.dto.WeatherInfo;
 import com.ktai.springlangchainforj.prop.OpenAiApiProp;
 import dev.langchain4j.model.openai.OpenAiChatModel;
+import dev.langchain4j.service.AiServices;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_3_5_TURBO;
 import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
 
 @SpringBootTest
-class SpringLangChain4jApplicationTests {
+class CountryAdviceTests {
 
     @Autowired
     private OpenAiApiProp openAiApiProp;
 
     @Test
-    void openAiApiConnectionTest() {
+    void weatherTest() {
         String apiKey = openAiApiProp.getApiKey();
         OpenAiChatModel model = OpenAiChatModel.builder()
                 .apiKey(apiKey)
-                .modelName(GPT_3_5_TURBO)
+                .modelName(GPT_4_O_MINI)
                 .build();
-        String answer = model.generate("こんにちは");
-        System.out.println(answer);
-// こんにちは！何かお手伝いできることはありますか？
+        CountryAdvice countryAdvice = AiServices.create(CountryAdvice.class, model);
+        String info = countryAdvice.chat("首都", "中国");
+        System.out.println(info);
 
     }
 
